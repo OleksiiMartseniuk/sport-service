@@ -17,10 +17,31 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reminder_time', models.IntegerField(blank=True, choices=[(9, 9), (14, 14), (18, 18)], null=True)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'reminder_time',
+                    models.IntegerField(
+                        blank=True,
+                        choices=[(9, 9), (14, 14), (18, 18)],
+                        null=True,
+                    ),
+                ),
                 ('is_email', models.BooleanField(default=False)),
-                ('owner', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    'owner',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
