@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_db_logger',
     'drf_yasg',
+
+    'apps.account',
 ]
 
 MIDDLEWARE = [
