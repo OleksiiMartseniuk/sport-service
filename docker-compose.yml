@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:14-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    container_name: sport_service_database
+    ports:
+      - "5432:5432"
+    env_file: .env
+
+  redis:
+    image: redis
+    container_name: sport_service_redis
+    volumes:
+      - redis:/bitnami/redis/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres:
+  redis:
