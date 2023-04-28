@@ -8,7 +8,7 @@
    <img src="" alt="License">
 </p>
 
-[![Check application](https://github.com/OleksiiMartseniuk/sport-service/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/OleksiiMartseniuk/sport-service/actions/workflows/python-app.yml)
+[![Check application](https://github.com/OleksiiMartseniuk/sport-service/actions/workflows/check-application.yml/badge.svg?branch=main)](https://github.com/OleksiiMartseniuk/sport-service/actions/workflows/check-application.yml)
 
 ## About
 
