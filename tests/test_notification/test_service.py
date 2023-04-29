@@ -13,7 +13,7 @@ class TestService(TestCase):
         user = User.objects.create_user(
             username='test',
             email='test@email.com',
-            password='password'
+            password='password',
         )
 
         notification = create_notification(
