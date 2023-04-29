@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                             ('success', 'success'),
                             ('error', 'error'),
                         ],
-                        max_length=10
+                        max_length=10,
                     ),
                 ),
                 (
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                             ('reminder', 'reminder'),
                         ],
                         max_length=10,
-                    )
+                    ),
                 ),
                 (
                     'exc_info',
