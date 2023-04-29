@@ -203,3 +203,9 @@ LOGGING = {
         },
     },
 }
+
+if DEBUG:
+    LOGGING['loggers']['django.db.backends'] = {
+        'level': LOG_LEVEL,
+        'handlers': ['console'],
+    }
