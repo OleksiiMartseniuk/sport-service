@@ -1,6 +1,7 @@
 import os
 import environ
 
+from datetime import timedelta
 from pathlib import Path
 
 
@@ -135,6 +136,11 @@ SWAGGER_SETTINGS = {
             'in': 'header',
         },
     },
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
 LOG_LEVEL = env('LOG_LEVEL', default='DEBUG')
