@@ -1,7 +1,6 @@
 import os
 import environ
 
-from datetime import timedelta
 from pathlib import Path
 
 
@@ -32,6 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'django_db_logger',
     'drf_yasg',
 
@@ -122,7 +123,28 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {},
+}
+
+EMAIL_BACKEND = env(
+    'EMAIL_BACKEND',
+    default='django.core.mail.backends.console.EmailBackend',
+)
+EMAIL_HOST = env('EMAIL_BACKEND')
+EMAIL_PORT = env('EMAIL_BACKEND')
+EMAIL_USE_SSL = env('EMAIL_BACKEND')
+EMAIL_HOST_USER = env('EMAIL_BACKEND')
+EMAIL_HOST_PASSWORD = env('EMAIL_BACKEND')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
