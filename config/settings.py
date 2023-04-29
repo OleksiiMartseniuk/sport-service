@@ -190,6 +190,10 @@ LOGGING = {
             'formatter': 'verbose',
             'filename': os.path.join(LOG_DIR, "backend_general.log"),
         },
+        'console_rich': {
+            'class': 'rich.logging.RichHandler',
+            'level': 'DEBUG',
+        },
     },
     'loggers': {
         'main': {
@@ -207,5 +211,5 @@ LOGGING = {
 if DEBUG:
     LOGGING['loggers']['django.db.backends'] = {
         'level': LOG_LEVEL,
-        'handlers': ['console'],
+        'handlers': ['console_rich'],
     }
