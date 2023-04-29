@@ -190,10 +190,6 @@ LOGGING = {
             'formatter': 'verbose',
             'filename': os.path.join(LOG_DIR, "backend_general.log"),
         },
-        'console_rich': {
-            'class': 'rich.logging.RichHandler',
-            'level': 'DEBUG',
-        },
     },
     'loggers': {
         'main': {
@@ -209,9 +205,5 @@ LOGGING = {
 }
 
 if DEBUG:
-    LOGGING['loggers']['django.db.backends'] = {
-        'level': LOG_LEVEL,
-        'handlers': ['console_rich'],
-    }
     INSTALLED_APPS.append('silk')
     MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
