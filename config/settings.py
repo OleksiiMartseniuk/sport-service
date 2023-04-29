@@ -140,11 +140,11 @@ EMAIL_BACKEND = env(
     'EMAIL_BACKEND',
     default='django.core.mail.backends.console.EmailBackend',
 )
-EMAIL_HOST = env('EMAIL_BACKEND')
-EMAIL_PORT = env('EMAIL_BACKEND')
-EMAIL_USE_SSL = env('EMAIL_BACKEND')
-EMAIL_HOST_USER = env('EMAIL_BACKEND')
-EMAIL_HOST_PASSWORD = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env('EMAIL_PORT', default='465')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='HostUser')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='Password')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
