@@ -19,6 +19,7 @@ djoser = "^2.2.0"
 flake8 = "^6.0.0"
 flake8-commas = "^2.1.0"
 rich = "^13.3.5"
+django-silk = "^5.0.3"
 
 [build-system]
 requires = ["poetry-core"]

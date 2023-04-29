@@ -213,3 +213,5 @@ if DEBUG:
         'level': LOG_LEVEL,
         'handlers': ['console_rich'],
     }
+    INSTALLED_APPS.append('silk')
+    MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
