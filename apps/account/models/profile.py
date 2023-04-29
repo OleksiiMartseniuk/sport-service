@@ -22,7 +22,6 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
-    is_email = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.owner.username
