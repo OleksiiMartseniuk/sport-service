@@ -138,11 +138,6 @@ SWAGGER_SETTINGS = {
     },
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-}
-
 LOG_LEVEL = env('LOG_LEVEL', default='DEBUG')
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
