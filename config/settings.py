@@ -156,8 +156,13 @@ SWAGGER_SETTINGS = {
     },
 }
 
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_TIMEZONE = env('CELERY_TIMEZONE', default='Europe/Kiev')
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
 LOG_LEVEL = env('LOG_LEVEL', default='DEBUG')
-LOG_DIR = os.path.join(BASE_DIR, "logs")
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 
 LOGGING = {
@@ -188,7 +193,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
-            'filename': os.path.join(LOG_DIR, "backend_general.log"),
+            'filename': os.path.join(LOG_DIR, 'backend_general.log'),
         },
     },
     'loggers': {
