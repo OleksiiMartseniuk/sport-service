@@ -2,7 +2,7 @@ from .models import Notification
 
 
 def create_notification(
-    user_id: int,
+    user_id: int | None,
     massage: str,
     group_notification: str,
     subject: str | None = None,

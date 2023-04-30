@@ -32,3 +32,15 @@ class TestService(TestCase):
             notification_new.group_notification,
             notification.group_notification,
         )
+
+    def test_create_notification_not_user(self):
+        notification = create_notification(
+            user_id=None,
+            massage='test massage',
+            group_notification=Notification.AUTH,
+        )
+
+        notification_new: Notification = Notification.objects.first()
+
+        self.assertEqual(notification_new.user, notification.user)
+        self.assertIsNone(notification_new.user_id)

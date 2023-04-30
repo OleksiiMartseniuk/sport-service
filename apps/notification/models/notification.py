@@ -24,6 +24,8 @@ class Notification(models.Model):
         User,
         related_name='notifications',
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     subject = models.CharField(
         max_length=100,
