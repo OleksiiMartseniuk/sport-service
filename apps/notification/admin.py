@@ -8,6 +8,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
     list_display = [
         'subject',
+        'user',
         'status',
         'group_notification',
         'created',
