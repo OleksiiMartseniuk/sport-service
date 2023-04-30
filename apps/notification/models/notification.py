@@ -32,7 +32,7 @@ class Notification(models.Model):
         blank=True,
         null=True,
     )
-    massage = models.TextField()
+    message = models.TextField()
     status = models.CharField(
         max_length=10,
         choices=StatusChoices,

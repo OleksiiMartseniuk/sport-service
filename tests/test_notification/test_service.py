@@ -18,7 +18,7 @@ class TestService(TestCase):
 
         notification = create_notification(
             user_id=user.id,
-            massage='test massage',
+            message='test massage',
             group_notification=Notification.AUTH,
         )
         self.assertEqual(Notification.objects.count(), 1)
@@ -36,7 +36,7 @@ class TestService(TestCase):
     def test_create_notification_not_user(self):
         notification = create_notification(
             user_id=None,
-            massage='test massage',
+            message='test massage',
             group_notification=Notification.AUTH,
         )
 
