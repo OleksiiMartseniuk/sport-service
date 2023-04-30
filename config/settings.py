@@ -146,6 +146,7 @@ EMAIL_PORT = env('EMAIL_PORT', default='465')
 EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=True)
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='HostUser')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='Password')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='user@example.com')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
