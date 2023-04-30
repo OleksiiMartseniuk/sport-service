@@ -17,7 +17,7 @@ class TestService(TestCase):
         )
 
         notification = create_notification(
-            user=user,
+            user_id=user.id,
             massage='test massage',
             group_notification=Notification.AUTH,
         )

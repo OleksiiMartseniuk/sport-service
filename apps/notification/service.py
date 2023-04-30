@@ -1,16 +1,14 @@
-from django.contrib.auth.models import User
-
 from .models import Notification
 
 
 def create_notification(
-    user: User,
+    user_id: int,
     massage: str,
     group_notification: str,
     subject: str | None = None,
 ) -> Notification:
     return Notification.objects.create(
-        user=user,
+        user_id=user_id,
         subject=subject,
         massage=massage,
         status=Notification.CREATE,
