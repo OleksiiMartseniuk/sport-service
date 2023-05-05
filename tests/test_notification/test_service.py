@@ -19,6 +19,7 @@ class TestService(TestCase):
         notification = create_notification(
             user_id=user.id,
             message='test massage',
+            subject='subject',
             recipient_email='test@email.com',
             group_notification=Notification.AUTH,
         )
@@ -42,6 +43,7 @@ class TestService(TestCase):
         notification = create_notification(
             user_id=None,
             message='test massage',
+            subject='subject',
             recipient_email='test@email.com',
             group_notification=Notification.AUTH,
         )
