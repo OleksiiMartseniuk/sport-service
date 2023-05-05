@@ -13,16 +13,16 @@ class Notification(models.Model):
     SUCCESS = 'success'
     ERROR = 'error'
     StatusChoices = (
-        (CREATE, 'create'),
-        (SUCCESS, 'success'),
-        (ERROR, 'error'),
+        (CREATE, 'Create'),
+        (SUCCESS, 'Success'),
+        (ERROR, 'Error'),
     )
 
     AUTH = 'auth'
     REMINDER = 'reminder'
     GroupNotificationChoices = (
-        (AUTH, 'auth'),
-        (REMINDER, 'reminder'),
+        (AUTH, 'Auth'),
+        (REMINDER, 'Reminder'),
     )
 
     user = models.ForeignKey(
@@ -37,8 +37,6 @@ class Notification(models.Model):
     )
     subject = models.CharField(
         max_length=100,
-        blank=True,
-        null=True,
     )
     message = models.TextField()
     status = models.CharField(
