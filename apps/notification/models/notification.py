@@ -1,5 +1,10 @@
+import logging
+
 from django.db import models
 from django.contrib.auth.models import User
+
+
+db_logger = logging.getLogger('db')
 
 
 class Notification(models.Model):
@@ -27,6 +32,9 @@ class Notification(models.Model):
         blank=True,
         null=True,
     )
+    recipient_email = models.CharField(
+        max_length=255,
+    )
     subject = models.CharField(
         max_length=100,
         blank=True,
@@ -48,3 +56,17 @@ class Notification(models.Model):
     created = models.DateTimeField(
         auto_now_add=True,
     )
+
+    def send(self):
+        from apps.notification.tasks import send_email
+
+        send_email.apply_async(
+            kwargs={
+                'notification_id': self.id,
+                'recipient': self.recipient_email,
+            },
+            queue='notification',
+        )
+
+    def __str__(self):
+        return f'Notification [{self.id}]'
