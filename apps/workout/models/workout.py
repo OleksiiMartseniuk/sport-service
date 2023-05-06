@@ -5,6 +5,7 @@ from .category import Category
 
 
 class Workout(models.Model):
+
     title = models.CharField(
         max_length=255,
     )
