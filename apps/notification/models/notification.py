@@ -39,6 +39,10 @@ class Notification(models.Model):
         max_length=100,
     )
     message = models.TextField()
+    html_message = models.TextField(
+        blank=True,
+        null=True,
+    )
     status = models.CharField(
         max_length=10,
         choices=StatusChoices,

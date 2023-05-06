@@ -135,6 +135,14 @@ DJOSER = {
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
+    'EMAIL': {
+        'activation': 'apps.account.djoser_email.ActivationEmailCustom',
+        'confirmation': 'apps.account.djoser_email.ConfirmationEmailCustom',
+        'password_reset': 'apps.account.djoser_email.PasswordResetEmailCustom',
+        'password_changed_confirmation': 'apps.account.djoser_email.PasswordChangedConfirmationEmailCustom',
+        'username_changed_confirmation': 'apps.account.djoser_email.UsernameChangedConfirmationEmailCustom',
+        'username_reset': 'apps.account.djoser_email.UsernameResetEmailCustom',
+    },
 }
 
 EMAIL_BACKEND = env(

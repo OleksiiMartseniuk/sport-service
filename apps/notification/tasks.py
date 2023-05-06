@@ -23,6 +23,7 @@ def send_email(notification_id: int, recipient: str):
             subject=notification.subject,
             message=notification.message,
             recipient_list=[recipient],
+            html_message=notification.html_message,
             from_email=None,
             fail_silently=True,
         )
