@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Workout
+from .models import Category, Workout, Exercise
 
 
 @admin.register(Category)
@@ -23,3 +23,24 @@ class WorkoutAdmin(admin.ModelAdmin):
         'created',
     )
     search_fields = ('title',)
+
+
+@admin.register(Exercise)
+class ExerciseAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'workout',
+        'publish',
+        'day',
+        'created',
+    )
+    list_filter = (
+        'workout__title',
+        'publish',
+        'day',
+        'created',
+    )
+    search_fields = (
+        'title',
+        'id',
+    )
