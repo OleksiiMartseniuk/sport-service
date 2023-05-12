@@ -7,6 +7,7 @@ from .category import Category
 class Workout(models.Model):
 
     title = models.CharField(
+        unique=True,
         max_length=255,
     )
     category = models.ForeignKey(
