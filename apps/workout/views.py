@@ -7,4 +7,4 @@ from .serializers import CategorySerializers
 class CategoryView(generics.ListAPIView):
 
     serializer_class = CategorySerializers
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('title')
