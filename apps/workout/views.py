@@ -40,3 +40,4 @@ class WorkoutView(viewsets.ModelViewSet):
             return [IsEditWorkout()]
         return super().get_permissions()
     # TODO: the method to destroy must also be removed exercise
+    # add a deletion history for users who are subscribed to the program
