@@ -127,3 +127,16 @@ class TestApi(TestCase):
         url = reverse('workout-detail', kwargs={'pk': workout.id})
         response = self.client.put(url, data={'title': new_title})
         self.assertEqual(response.status_code, 403)
+
+    def test_workout_destroy(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+
+        url = reverse('workout-detail', kwargs={'pk': workout.id})
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, 204)
