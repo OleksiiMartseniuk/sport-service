@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from djoser.serializers import UserSerializer
+from apps.account.serializers import UserCustomSerializer
 
 from .models import Category, Workout
 
@@ -41,4 +41,4 @@ class WorkoutUpdateSerializers(WorkoutSerializers):
 class WorkoutRetrieveSerializers(WorkoutSerializers):
 
     category = CategorySerializers()
-    user = UserSerializer()
+    user = UserCustomSerializer()
