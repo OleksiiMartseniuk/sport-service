@@ -21,7 +21,6 @@ class WorkoutView(viewsets.ModelViewSet):
 
     serializer_class = WorkoutListSerializers
     queryset = Workout.objects.filter(publish=True).order_by('created')
-    permission_classes = [IsEditWorkout]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -31,3 +30,12 @@ class WorkoutView(viewsets.ModelViewSet):
         if self.action == 'update' or self.action == 'partial_update':
             return WorkoutUpdateSerializers
         return super().get_serializer_class()
+
+    def get_permissions(self):
+        if (
+            self.action == 'update' or
+            self.action == 'partial_update' or
+            self.action == 'destroy'
+        ):
+            return [IsEditWorkout()]
+        return super().get_permissions()
