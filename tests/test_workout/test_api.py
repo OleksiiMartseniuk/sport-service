@@ -58,3 +58,25 @@ class TestApi(TestCase):
         self.assertEqual(workout.id, workout_res['id'])
         self.assertEqual(workout.title, workout_res['title'])
         self.assertEqual(workout.category.id, workout_res['category'])
+
+    def test_workout_list(self):
+        category = Category.objects.create(title='tets_category')
+        workouts = Workout.objects.bulk_create(
+            [
+                Workout(title='test_workout', category=category),
+                Workout(title='test_workout1', category=category),
+                Workout(title='test_workout2', category=category),
+            ],
+        )
+
+        url = reverse('workout-list')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+        workouts_res = response.json()['results']
+
+        for workout, workout_res in zip(workouts, workouts_res):
+            self.assertEqual(workout.id, workout_res['id'])
+            self.assertEqual(workout.title, workout_res['title'])
+            self.assertEqual(workout.category.id, workout_res['category'])
