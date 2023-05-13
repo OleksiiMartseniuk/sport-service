@@ -80,3 +80,50 @@ class TestApi(TestCase):
             self.assertEqual(workout.id, workout_res['id'])
             self.assertEqual(workout.title, workout_res['title'])
             self.assertEqual(workout.category.id, workout_res['category'])
+
+    def test_workout_retrieve(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+
+        url = reverse('workout-detail', kwargs={'pk': workout.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+        workout_res = response.json()
+        self.assertEqual(workout.id, workout_res['id'])
+        self.assertEqual(workout.user, None)
+        self.assertEqual(workout.category.id, workout_res['category']['id'])
+
+    def test_workout_update(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+
+        new_title = 'update_title'
+        url = reverse('workout-detail', kwargs={'pk': workout.id})
+        response = self.client.put(url, data={'title': new_title})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['title'], new_title)
+
+        workout_update = Workout.objects.first()
+        self.assertEqual(workout_update.title, new_title)
+
+    def test_workout_update_not_permission(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+
+        new_title = 'update_title'
+        url = reverse('workout-detail', kwargs={'pk': workout.id})
+        response = self.client.put(url, data={'title': new_title})
+        self.assertEqual(response.status_code, 403)
