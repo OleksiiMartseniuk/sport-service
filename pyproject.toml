@@ -16,6 +16,7 @@ djoser = "^2.2.0"
 celery = "^5.2.7"
 redis = "^4.5.4"
 pillow = "^9.5.0"
+django-filter = "^23.2"
 
 
 [tool.poetry.group.dev.dependencies]
