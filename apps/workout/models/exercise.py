@@ -6,13 +6,13 @@ from .workout import Workout
 
 class Exercise(models.Model):
 
-    MONDAY = 'Mun'
-    TUESDAY = 'Tues'
-    WEDNESDAY = 'Wed'
-    THURSDAY = 'Thurs'
-    FRIDAY = 'Fri'
-    SATURDAY = 'Sat'
-    SUNDAY = 'Sun'
+    MONDAY = '0'
+    TUESDAY = '1'
+    WEDNESDAY = '2'
+    THURSDAY = '3'
+    FRIDAY = '4'
+    SATURDAY = '5'
+    SUNDAY = '6'
 
     DAY_WEEK = (
         (MONDAY, 'Monday'),
