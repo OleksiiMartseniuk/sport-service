@@ -1,5 +1,7 @@
 from rest_framework import generics, viewsets
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Category, Workout
 from .serializers import (
     CategorySerializers,
@@ -20,7 +22,12 @@ class CategoryView(generics.ListAPIView):
 class WorkoutView(viewsets.ModelViewSet):
 
     serializer_class = WorkoutListSerializers
-    queryset = Workout.objects.filter(publish=True).order_by('created')
+    queryset = Workout.objects.select_related(
+        'category',
+        'user',
+    ).filter(publish=True).order_by('created')
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category']
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
