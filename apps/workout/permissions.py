@@ -19,7 +19,7 @@ class IsCreateExercise(BasePermission):
     def has_permission(self, request, view):
         if request.user and request.user.is_authenticated:
             workout = Workout.objects.filter(
-                id=request.POST.get('workout'),
+                id=request.data.get('workout'),
                 user=request.user,
             )
             return True if workout else False
