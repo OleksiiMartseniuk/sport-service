@@ -6,15 +6,15 @@ from .models import Notification
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
 
-    list_display = [
+    list_display = (
         'subject',
         'user',
         'status',
         'group_notification',
         'created',
-    ]
-    list_filter = [
+    )
+    list_filter = (
         'status',
         'group_notification',
         'user',
-    ]
+    )

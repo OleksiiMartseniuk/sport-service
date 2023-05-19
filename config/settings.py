@@ -33,11 +33,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'django_filters',
     'django_db_logger',
     'drf_yasg',
 
     'apps.account',
     'apps.notification',
+    'apps.workout',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -127,6 +132,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 DJOSER = {
@@ -134,7 +141,10 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user': 'apps.account.serializers.UserCustomSerializer',
+        'current_user': 'apps.account.serializers.UserCustomSerializer',
+    },
     'EMAIL': {
         'activation': 'apps.account.djoser_email.ActivationEmailCustom',
         'confirmation': 'apps.account.djoser_email.ConfirmationEmailCustom',
