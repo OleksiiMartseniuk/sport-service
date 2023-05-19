@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.account.serializers import UserCustomSerializer
 
-from .models import Category, Workout
+from .models import Category, Workout, Exercise
 
 
 class CategorySerializers(serializers.ModelSerializer):
@@ -42,3 +42,15 @@ class WorkoutRetrieveSerializers(WorkoutSerializers):
 
     category = CategorySerializers()
     user = UserCustomSerializer()
+
+
+class ExerciseSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Exercise
+        exclude = ['publish']
+
+
+class ExerciseRetrieveSerializers(ExerciseSerializers):
+
+    workout = WorkoutRetrieveSerializers()
