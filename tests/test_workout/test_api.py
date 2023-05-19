@@ -1,10 +1,15 @@
+import io
+
+from PIL import Image
+
 from django.urls import reverse
 from django.test import TestCase
 from rest_framework.test import APIClient
 
 from django.contrib.auth.models import User
+from django.core.files import File
 
-from apps.workout.models import Category, Workout
+from apps.workout.models import Category, Workout, Exercise
 
 
 class TestApi(TestCase):
@@ -14,6 +19,13 @@ class TestApi(TestCase):
         self.user = User.objects.create_user('test_user')
         self.client.force_authenticate(self.user)
         self.client.force_authenticate(user=self.user)
+
+    def generate_image_file(self):
+        file = io.BytesIO()
+        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
+        image.save(file, 'png')
+        file.seek(0)
+        return File(file, name='test.png')
 
     def test_category(self):
         Category.objects.bulk_create(
@@ -140,3 +152,106 @@ class TestApi(TestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, 204)
+
+    def test_exercise_create(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+        url = reverse('exercise-list')
+
+        exercise_data = {
+            'title': 'exercise_test',
+            'number_approaches': 1,
+            'number_repetitions': 1,
+            'rest_second': 1,
+            'day': Exercise.MONDAY,
+            'workout': workout.id,
+            'image': self.generate_image_file(),
+        }
+        response = self.client.post(
+            url,
+            data=exercise_data,
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, 201)
+
+        exercise_res = response.json()
+        self.assertEqual(exercise_res['title'], exercise_data['title'])
+        self.assertEqual(exercise_res['day'], exercise_data['day'])
+        self.assertEqual(exercise_res['workout'], exercise_data['workout'])
+        self.assertEqual(
+            exercise_res['number_approaches'],
+            exercise_data['number_approaches'],
+        )
+        self.assertEqual(
+            exercise_res['number_repetitions'],
+            exercise_data['number_repetitions'],
+        )
+        self.assertEqual(
+            exercise_res['rest_second'],
+            exercise_data['rest_second'],
+        )
+
+    def test_exercise_create_not_permission(self):
+        user = User.objects.create_user('test_user_1')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=user,
+        )
+        url = reverse('exercise-list')
+
+        exercise_data = {
+            'title': 'exercise_test',
+            'number_approaches': 1,
+            'number_repetitions': 1,
+            'rest_second': 1,
+            'day': Exercise.MONDAY,
+            'workout': workout.id,
+            'image': self.generate_image_file(),
+        }
+        response = self.client.post(
+            url,
+            data=exercise_data,
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_exercise_retrieve(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+
+        url = reverse('exercise-detail', kwargs={'pk': exercise.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+        exercise_res = response.json()
+
+        self.assertEqual(exercise.id, exercise_res['id'])
+        self.assertEqual(exercise.workout.id, exercise_res['workout']['id'])
+        self.assertEqual(
+            exercise.workout.category.id,
+            exercise_res['workout']['category']['id'],
+        )
+        self.assertEqual(
+            exercise.workout.user.id,
+            exercise_res['workout']['user']['id'],
+        )
