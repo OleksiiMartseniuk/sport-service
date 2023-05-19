@@ -54,3 +54,23 @@ class ExerciseSerializers(serializers.ModelSerializer):
 class ExerciseRetrieveSerializers(ExerciseSerializers):
 
     workout = WorkoutRetrieveSerializers()
+
+
+class ExerciseUpdateSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Exercise
+        fields = [
+            'title',
+            'number_approaches',
+            'number_repetitions',
+            'rest_second',
+            'day',
+        ]
+        extra_kwargs = {
+            'title': {'required': False},
+            'number_approaches': {'required': False},
+            'number_repetitions': {'required': False},
+            'rest_second': {'required': False},
+            'day': {'required': False},
+        }

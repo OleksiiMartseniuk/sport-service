@@ -11,6 +11,7 @@ from .serializers import (
     WorkoutRetrieveSerializers,
     ExerciseSerializers,
     ExerciseRetrieveSerializers,
+    ExerciseUpdateSerializers,
 )
 from .permissions import IsEditWorkout, IsEditExercise, IsCreateExercise
 
@@ -65,6 +66,11 @@ class ExerciseView(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return ExerciseRetrieveSerializers
+        elif (
+            self.action == 'update' or
+            self.action == 'partial_update'
+        ):
+            return ExerciseUpdateSerializers
         return super().get_serializer_class()
 
     def get_permissions(self):

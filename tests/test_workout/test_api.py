@@ -255,3 +255,90 @@ class TestApi(TestCase):
             exercise.workout.user.id,
             exercise_res['workout']['user']['id'],
         )
+
+    def test_exercise_update(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+
+        url = reverse('exercise-detail', kwargs={'pk': exercise.id})
+        response = self.client.put(url, data={'title': 'update_title'})
+
+        self.assertEqual(response.status_code, 200)
+
+        exercise_res = response.json()
+        exercise_update = Exercise.objects.first()
+        self.assertEqual(exercise_update.title, exercise_res['title'])
+
+    def test_exercise_update_not_permission(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+        url = reverse('exercise-detail', kwargs={'pk': exercise.id})
+        response = self.client.put(url, data={'title': 'update_title'})
+        self.assertEqual(response.status_code, 403)
+
+    def test_exercise_delete(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=self.user,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+        url = reverse('exercise-detail', kwargs={'pk': exercise.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)
+        self.assertIsNone(Exercise.objects.first())
+
+    def test_exercise_delete_not_permission(self):
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+        url = reverse('exercise-detail', kwargs={'pk': exercise.id})
+
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(Exercise.objects.count(), 1)
