@@ -1,4 +1,5 @@
 from rest_framework import generics, viewsets
+from rest_framework.parsers import MultiPartParser
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -62,6 +63,7 @@ class ExerciseView(viewsets.ModelViewSet):
     serializer_class = ExerciseSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['workout', 'day']
+    parser_classes = [MultiPartParser]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
