@@ -23,4 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['reminder_time']
+        fields = [
+            'reminder_time',
+            'workout',
+        ]
