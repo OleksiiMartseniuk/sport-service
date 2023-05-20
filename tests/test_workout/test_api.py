@@ -1,5 +1,6 @@
 import io
 
+from unittest.mock import MagicMock, patch
 from PIL import Image
 
 from django.urls import reverse
@@ -10,6 +11,7 @@ from django.contrib.auth.models import User
 from django.core.files import File
 
 from apps.workout.models import Category, Workout, Exercise
+from apps.notification.models import Notification
 
 
 class TestApi(TestCase):
@@ -140,18 +142,38 @@ class TestApi(TestCase):
         response = self.client.put(url, data={'title': new_title})
         self.assertEqual(response.status_code, 403)
 
-    def test_workout_destroy(self):
+    @patch('apps.notification.models.Notification.send')
+    def test_workout_destroy(self, send_mock: MagicMock):
         category = Category.objects.create(title='tets_category')
         workout = Workout.objects.create(
             title='test_workout',
             category=category,
             user=self.user,
         )
+        user_test = User.objects.create_user('test_user_2')
+        user_test.profile.workout = workout
+        user_test.save()
+        Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+        self.assertEqual(Notification.objects.count(), 0)
 
         url = reverse('workout-detail', kwargs={'pk': workout.id})
         response = self.client.delete(url)
 
+        send_mock.assert_called()
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(Workout.objects.count(), 0)
+        self.assertEqual(Exercise.objects.count(), 0)
+        user_test = User.objects.get(username='test_user_2')
+        self.assertIsNone(user_test.profile.workout)
+        self.assertEqual(Notification.objects.count(), 1)
 
     def test_exercise_create(self):
         category = Category.objects.create(title='tets_category')
