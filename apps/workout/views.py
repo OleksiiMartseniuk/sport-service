@@ -3,6 +3,9 @@ from rest_framework.parsers import MultiPartParser
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from apps.account.models import Profile
+from apps.notification.service import send_notification_at_remove_workout
+
 from .models import Category, Workout, Exercise
 from .serializers import (
     CategorySerializers,
@@ -50,8 +53,21 @@ class WorkoutView(viewsets.ModelViewSet):
         ):
             return [IsEditWorkout()]
         return super().get_permissions()
-    # TODO: the method to destroy must also be removed exercise
-    # add a deletion history for users who are subscribed to the program
+
+    def perform_destroy(self, instance: Workout):
+        users_id = list(
+            Profile.objects.filter(workout=instance)
+            .values_list('owner', flat=True),
+        )
+
+        workout_title = instance.title
+        instance.exercises.all().delete()
+        instance.delete()
+
+        send_notification_at_remove_workout(
+            users_id=users_id,
+            workout_title=workout_title,
+        )
 
 
 class ExerciseView(viewsets.ModelViewSet):

@@ -20,9 +20,13 @@ class Notification(models.Model):
 
     AUTH = 'auth'
     REMINDER = 'reminder'
+    SYSTEM = 'system'
+    ACTION = 'action'
     GroupNotificationChoices = (
         (AUTH, 'Auth'),
         (REMINDER, 'Reminder'),
+        (SYSTEM, 'System'),
+        (ACTION, 'Action'),
     )
 
     user = models.ForeignKey(
