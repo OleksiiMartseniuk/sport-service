@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from apps.workout.models import Workout
+
 
 class Profile(models.Model):
 
@@ -16,9 +18,19 @@ class Profile(models.Model):
         (EVENING, 18),
     )
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+    )
     reminder_time = models.IntegerField(
         choices=ReminderTimeChoices,
+        blank=True,
+        null=True,
+    )
+    workout = models.ForeignKey(
+        Workout,
+        on_delete=models.SET_NULL,
+        related_name='profiles',
         blank=True,
         null=True,
     )
