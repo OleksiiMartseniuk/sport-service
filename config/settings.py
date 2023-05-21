@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.notification',
     'apps.workout',
+
+    # remove dir image
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

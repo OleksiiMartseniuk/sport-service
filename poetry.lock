@@ -485,6 +485,18 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-cleanup"
+version = "7.0.0"
+description = "Deletes old files."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-cleanup-7.0.0.tar.gz", hash = "sha256:28a969f889c661eba0d9438978693980f09482c97983bd08ee52955dae8d71e4"},
+    {file = "django_cleanup-7.0.0-py2.py3-none-any.whl", hash = "sha256:f50d54de48527d66ff05d74d2c3aafcdadc6c94ba280ece14a7e4c5b2c591447"},
+]
+
+[[package]]
 name = "django-db-logger"
 version = "0.1.12"
 description = "Django logging in database"
@@ -1363,4 +1375,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5ee668c61e917cad1c7795ec483e30748ed80a66639dda6f819cb2d42dd754d5"
+content-hash = "b1f78f5c68378e47722afaa3d56ed13e71ca027a567dc35e8e08bd331ea08421"
