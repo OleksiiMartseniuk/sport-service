@@ -26,30 +26,58 @@ def create_notification(
     )
 
 
-def send_notification_at_remove_workout(
-    users_id: list,
-    workout_title: str,
-    subject: str = 'Removed workout',
-):
-    users = User.objects.filter(id__in=users_id)
+class SendNotification:
 
-    for user in users:
-        html_message = render_to_string(
-            template_name=os.path.join(
-                settings.TEMPLATE_NOTIFICATION,
-                'remove_workout.html',
-            ),
-            context={
-                'username': user.username,
-                'program_name': workout_title,
-            },
+    def __init__(self) -> None:
+        self.template_path = settings.TEMPLATE_NOTIFICATION
+
+    def __send_notification_users(
+        self,
+        users_id: list,
+        template_context: dict,
+        template_name: str,
+        group_notification: str,
+        subject: str,
+    ) -> None:
+        users = User.objects.filter(id__in=users_id)
+
+        for user in users:
+            html_message = render_to_string(
+                template_name=os.path.join(self.template_path, template_name),
+                context={'user': user, **template_context},
+            )
+            notification = create_notification(
+                recipient_email=user.email,
+                message=html_message,
+                subject=subject,
+                group_notification=group_notification,
+                user_id=user.id,
+                html_message=html_message,
+            )
+            notification.send()
+
+    def send_notification_at_publish(
+        self,
+        users_id: list,
+        workout_title: str,
+    ) -> None:
+        self.__send_notification_users(
+            users_id=users_id,
+            template_name='publish_workout.html',
+            template_context={'program_name': workout_title},
+            group_notification=Notification.SYSTEM,
+            subject='Workout blocked',
         )
-        notification = create_notification(
-            recipient_email=user.email,
-            message=html_message,
-            subject=subject,
+
+    def send_notification_at_remove_workout(
+        self,
+        users_id: list,
+        workout_title: str,
+    ) -> None:
+        self.__send_notification_users(
+            users_id=users_id,
+            template_name='remove_workout.html',
+            template_context={'program_name': workout_title},
             group_notification=Notification.ACTION,
-            user_id=user.id,
-            html_message=html_message,
+            subject='Removed workout',
         )
-        notification.send()
