@@ -4,7 +4,7 @@ from rest_framework.parsers import MultiPartParser
 from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.account.models import Profile
-from apps.notification.service import send_notification_at_remove_workout
+from apps.notification.service import SendNotification
 
 from .models import Category, Workout, Exercise
 from .serializers import (
@@ -64,7 +64,7 @@ class WorkoutView(viewsets.ModelViewSet):
         instance.exercises.all().delete()
         instance.delete()
 
-        send_notification_at_remove_workout(
+        SendNotification().send_notification_at_remove_workout(
             users_id=users_id,
             workout_title=workout_title,
         )
