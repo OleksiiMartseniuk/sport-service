@@ -29,8 +29,7 @@ def create_notification(
 def send_notification_at_remove_workout(
     users_id: list,
     workout_title: str,
-    subject: str = 'Removed workout',
-):
+) -> None:
     users = User.objects.filter(id__in=users_id)
 
     for user in users:
@@ -47,7 +46,7 @@ def send_notification_at_remove_workout(
         notification = create_notification(
             recipient_email=user.email,
             message=html_message,
-            subject=subject,
+            subject='Removed workout',
             group_notification=Notification.ACTION,
             user_id=user.id,
             html_message=html_message,
