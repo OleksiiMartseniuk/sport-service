@@ -216,6 +216,7 @@ class TestApi(TestCase):
             exercise_res['rest_second'],
             exercise_data['rest_second'],
         )
+        Exercise.objects.first().image.delete()
 
     def test_exercise_create_not_permission(self):
         user = User.objects.create_user('test_user_1')
@@ -277,6 +278,7 @@ class TestApi(TestCase):
             exercise.workout.user.id,
             exercise_res['workout']['user']['id'],
         )
+        Exercise.objects.first().image.delete()
 
     def test_exercise_update(self):
         category = Category.objects.create(title='tets_category')
@@ -303,6 +305,7 @@ class TestApi(TestCase):
         exercise_res = response.json()
         exercise_update = Exercise.objects.first()
         self.assertEqual(exercise_update.title, exercise_res['title'])
+        Exercise.objects.first().image.delete()
 
     def test_exercise_update_not_permission(self):
         category = Category.objects.create(title='tets_category')
@@ -322,6 +325,7 @@ class TestApi(TestCase):
         url = reverse('exercise-detail', kwargs={'pk': exercise.id})
         response = self.client.put(url, data={'title': 'update_title'})
         self.assertEqual(response.status_code, 403)
+        Exercise.objects.first().image.delete()
 
     def test_exercise_delete(self):
         category = Category.objects.create(title='tets_category')
@@ -364,3 +368,4 @@ class TestApi(TestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Exercise.objects.count(), 1)
+        Exercise.objects.first().image.delete()
