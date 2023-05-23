@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.notification',
     'apps.workout',
+    'apps.history',
 
     # remove dir image
     'django_cleanup.apps.CleanupConfig',
