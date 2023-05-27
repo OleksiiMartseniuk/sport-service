@@ -16,6 +16,7 @@ class WorkoutHistory(models.Model):
         on_delete=models.CASCADE,
         related_name='history_workout',
     )
+    # datetime - iso format
     # [{'datetime': 'event'}]
     detail_info = models.JSONField(default=list)
     data_open = models.DateTimeField(
