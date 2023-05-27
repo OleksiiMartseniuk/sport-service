@@ -19,7 +19,6 @@ class TestService(TestCase):
         HistoryAction.create_workout(
             user=user,
             workout=workout,
-            detail_info='test_massage',
         )
         self.assertEqual(WorkoutHistory.objects.count(), 1)
 
@@ -28,6 +27,6 @@ class TestService(TestCase):
         self.assertEqual(history.workout, workout)
         self.assertEqual(history.user, user)
         self.assertEqual(
-            list(history.detail_info[0].values()),
-            ['test_massage'],
+            history.detail_info[0]['event'],
+            'The program was started',
         )
