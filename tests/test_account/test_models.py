@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 from apps.account.models import Profile
+from apps.workout.models import Category, Workout
+from apps.history.models import WorkoutHistory
 
 
 class TestModels(TestCase):
@@ -41,3 +43,76 @@ class TestModels(TestCase):
 
         profile = Profile.objects.get(owner=user)
         self.assertEqual(profile.reminder_time, Profile.DAY)
+
+    def test_write_history_workout_change_none_program(self):
+        user = User.objects.create_user('test_user_1')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=user,
+        )
+
+        self.assertEqual(WorkoutHistory.objects.count(), 0)
+        user.profile.workout = workout
+        user.save()
+
+        self.assertEqual(WorkoutHistory.objects.count(), 1)
+        history = WorkoutHistory.objects.first()
+        self.assertIsNone(history.data_close)
+
+    def test_write_history_workout_change_program_program(self):
+        user = User.objects.create_user('test_user_1')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=user,
+        )
+        workout_other = Workout.objects.create(
+            title='test_workout_other',
+            category=category,
+            user=user,
+        )
+        user.profile.workout = workout
+        user.save()
+
+        self.assertEqual(WorkoutHistory.objects.count(), 1)
+        history = WorkoutHistory.objects.first()
+        self.assertIsNone(history.data_close)
+
+        user.profile.workout = workout_other
+        user.save()
+
+        history.refresh_from_db()
+        self.assertTrue(history.data_close)
+
+        history_new = WorkoutHistory.objects.filter(
+            user=user,
+            workout=workout_other,
+            data_close__isnull=True,
+        ).first()
+        self.assertIsNone(history_new.data_close)
+        self.assertEqual(WorkoutHistory.objects.count(), 2)
+
+    def test_write_history_workout_change_program_none(self):
+        user = User.objects.create_user('test_user_1')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+            user=user,
+        )
+        user.profile.workout = workout
+        user.save()
+
+        self.assertEqual(WorkoutHistory.objects.count(), 1)
+        history = WorkoutHistory.objects.first()
+        self.assertIsNone(history.data_close)
+
+        user.profile.workout = None
+        user.save()
+
+        history.refresh_from_db()
+        self.assertTrue(history.data_close)
+        self.assertEqual(WorkoutHistory.objects.count(), 1)
