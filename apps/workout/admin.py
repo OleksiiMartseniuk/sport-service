@@ -22,7 +22,10 @@ class WorkoutAdmin(admin.ModelAdmin):
         'user',
         'created',
     )
-    search_fields = ('title',)
+    search_fields = (
+        'id',
+        'title',
+    )
 
 
 @admin.register(Exercise)

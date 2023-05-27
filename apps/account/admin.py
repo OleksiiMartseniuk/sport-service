@@ -8,11 +8,18 @@ from .models import Profile
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
-    verbose_name_plural = "profile"
+    verbose_name_plural = 'profile'
 
 
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
+    search_fields = (
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+    )
 
 
 admin.site.unregister(User)
