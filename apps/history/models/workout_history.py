@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 from apps.workout.models import Workout
@@ -17,7 +18,7 @@ class WorkoutHistory(models.Model):
         related_name='history_workout',
     )
     # datetime - iso format
-    # [{'datetime': 'event'}]
+    # [{'datetime': 'value', 'event': 'value'}]
     detail_info = models.JSONField(default=list)
     data_open = models.DateTimeField(
         auto_now_add=True,
@@ -27,6 +28,10 @@ class WorkoutHistory(models.Model):
         blank=True,
         null=True,
     )
+
+    def close_workout(self):
+        self.data_close = timezone.now()
+        self.save(update_fields=('data_close',))
 
     def __str__(self) -> str:
         return (f"History workout [ {self.workout.title} ]"
