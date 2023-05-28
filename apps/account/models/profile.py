@@ -62,7 +62,7 @@ def write_history_workout(sender, instance: Profile, **kwargs):
         previous_profile: Profile = sender.objects.get(id=instance.id)
         if previous_profile.workout != instance.workout:
             if previous_profile.workout:
-                HistoryAction.close_workout(
+                HistoryAction().close_workout(
                     user=previous_profile.owner,
                     workout=previous_profile.workout,
                 )

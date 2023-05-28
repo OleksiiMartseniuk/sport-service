@@ -29,11 +29,29 @@ class HistoryAction:
             detail_info=detail_info,
         )
 
-    @staticmethod
     def close_workout(
+        self,
         user: User,
         workout: Workout,
     ):
+        history = self.get_current_workout_history(user=user, workout=workout)
+        history.close_workout()
+
+    def update_workout(
+        self,
+        user: User,
+        workout: Workout,
+        detail_info: list[dict],
+    ):
+        history = self.get_current_workout_history(user=user, workout=workout)
+        history.detail_info.append(detail_info)
+        history.save()
+
+    @staticmethod
+    def get_current_workout_history(
+        user: User,
+        workout: Workout,
+    ) -> WorkoutHistory:
         workout_history: WorkoutHistory | None = WorkoutHistory.objects.filter(
             user=user,
             workout=workout,
@@ -48,4 +66,4 @@ class HistoryAction:
             )
             raise ValueError('Not found history for close workout')
 
-        workout_history.close_workout()
+        return workout_history
