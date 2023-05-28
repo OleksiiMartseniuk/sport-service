@@ -6,6 +6,7 @@ from django.utils import timezone
 from apps.workout.models import Workout
 
 from .models import WorkoutHistory
+from .exceptions import HistoryWorkoutNotFound
 
 logger = logging.getLogger('db')
 
@@ -41,8 +42,8 @@ class HistoryAction:
         self,
         user: User,
         workout: Workout,
-        # [{'datetime': 'value', 'event': 'value'}]
-        detail_info: list[dict],
+        # {'datetime': 'value', 'event': 'value'}
+        detail_info: dict,
     ):
         history = self.get_current_workout_history(user=user, workout=workout)
         history.detail_info.append(detail_info)
@@ -65,6 +66,6 @@ class HistoryAction:
                 f'filter(user={user.id}, workout={workout.id},'
                 ' data_close__isnull=True)',
             )
-            raise ValueError('Not found history for close workout')
+            raise HistoryWorkoutNotFound('Not found history for close workout')
 
         return workout_history
