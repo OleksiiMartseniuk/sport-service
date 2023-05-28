@@ -41,6 +41,7 @@ class HistoryAction:
         self,
         user: User,
         workout: Workout,
+        # [{'datetime': 'value', 'event': 'value'}]
         detail_info: list[dict],
     ):
         history = self.get_current_workout_history(user=user, workout=workout)
