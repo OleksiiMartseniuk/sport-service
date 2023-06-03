@@ -21,7 +21,7 @@ class HistoryAction:
         detail_info = [
             {
                 'datetime': f'{timezone.now().isoformat()}',
-                'event': 'The program was started',
+                'event': f'The program #{workout.title} was started',
             },
         ]
         WorkoutHistory.objects.create(
@@ -38,23 +38,36 @@ class HistoryAction:
         history = self.get_current_workout_history(user=user, workout=workout)
         history.close_workout()
 
-    def update_workout(
+    def close_workout_for_users(users_id: list[int], workout: Workout):
+        WorkoutHistory.objects.filter(
+            user__in=users_id,
+            workout=workout,
+            data_close__isnull=True,
+        ).update(data_close=timezone.now())
+
+    def update_workout_users(
         self,
-        user: User,
+        users_id: list[int],
         workout: Workout,
         # {'datetime': 'value', 'event': 'value'}
         detail_info: dict,
     ):
-        history = self.get_current_workout_history(user=user, workout=workout)
-        history.detail_info.append(detail_info)
-        history.save()
+        history_list = WorkoutHistory.objects.filter(
+            user__in=users_id,
+            workout=workout,
+            data_close__isnull=True,
+        ).only('detail_info')
+
+        for history in history_list:
+            history.detail_info.append(detail_info)
+            history.save(update_fields=('detail_info',))
 
     @staticmethod
     def get_current_workout_history(
         user: User,
         workout: Workout,
     ) -> WorkoutHistory:
-        workout_history: WorkoutHistory | None = WorkoutHistory.objects.filter(
+        workout_history = WorkoutHistory.objects.filter(
             user=user,
             workout=workout,
             data_close__isnull=True,
