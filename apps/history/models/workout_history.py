@@ -14,8 +14,9 @@ class WorkoutHistory(models.Model):
     )
     workout = models.ForeignKey(
         Workout,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='history_workout',
+        null=True,
     )
     # datetime - iso format
     # [{'datetime': 'value', 'event': 'value'}]
@@ -34,5 +35,5 @@ class WorkoutHistory(models.Model):
         self.save(update_fields=('data_close',))
 
     def __str__(self) -> str:
-        return (f"History workout [ {self.workout.title} ]"
+        return (f"History [ {self.id} ] workout"
                 f" user [ {self.user.username} ]")
