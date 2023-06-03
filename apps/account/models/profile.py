@@ -67,8 +67,8 @@ def write_history_workout(sender, instance: Profile, **kwargs):
                     workout=previous_profile.workout,
                 )
                 logger.info(
-                    f'User [{previous_profile.owner.id}] unsubscribed'
-                    f' workout [{previous_profile.workout.id}]',
+                    f'User [{previous_profile.owner.username}] unsubscribed'
+                    f' workout [{previous_profile.workout.title}]',
                 )
             if instance.workout:
                 HistoryAction.create_workout(
@@ -76,6 +76,6 @@ def write_history_workout(sender, instance: Profile, **kwargs):
                     workout=instance.workout,
                 )
                 logger.info(
-                    f'User [{instance.owner.id}] subscribed'
-                    f' to workout [{instance.workout.id}]',
+                    f'User [{instance.owner.username}] subscribed'
+                    f' to workout [{instance.workout.title}]',
                 )
