@@ -12,6 +12,7 @@ from django.core.files import File
 
 from apps.workout.models import Category, Workout, Exercise
 from apps.notification.models import Notification
+from apps.history.models import WorkoutHistory
 
 
 class TestApi(TestCase):
@@ -174,6 +175,12 @@ class TestApi(TestCase):
         user_test = User.objects.get(username='test_user_2')
         self.assertIsNone(user_test.profile.workout)
         self.assertEqual(Notification.objects.count(), 1)
+        history = WorkoutHistory.objects.first()
+        self.assertTrue(history.data_close)
+        self.assertEqual(
+            history.detail_info[1]['event'],
+            f'Owner {workout.user.username} workout removed workout',
+        )
 
     def test_exercise_create(self):
         category = Category.objects.create(title='tets_category')
