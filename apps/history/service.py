@@ -11,7 +11,7 @@ from .exceptions import HistoryWorkoutNotFound
 logger = logging.getLogger('db')
 
 
-class HistoryAction:
+class WorkoutHistoryAction:
 
     @staticmethod
     def create_workout(

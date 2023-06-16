@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from apps.workout.models import Category, Workout
 from apps.history.models import WorkoutHistory
-from apps.history.service import HistoryAction
+from apps.history.service import WorkoutHistoryAction
 
 
 class TestService(TestCase):
@@ -17,7 +17,7 @@ class TestService(TestCase):
             title='test_workout',
             category=category,
         )
-        HistoryAction.create_workout(
+        WorkoutHistoryAction.create_workout(
             user=user,
             workout=workout,
         )
@@ -50,7 +50,7 @@ class TestService(TestCase):
             user=user,
             workout=workout,
         )
-        current_history = HistoryAction.get_current_workout_history(
+        current_history = WorkoutHistoryAction.get_current_workout_history(
             user=user,
             workout=workout,
         )
