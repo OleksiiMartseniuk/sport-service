@@ -25,7 +25,17 @@ class ExerciseHistory(models.Model):
         on_delete=models.CASCADE,
         related_name='exercise_history',
     )
-    event = models.ManyToManyField(Event)
+    event = models.ManyToManyField(
+        Event,
+    )
+    open_date = models.DateTimeField(
+        auto_now_add=True,
+    )
+    close_date = models.DateTimeField(
+        default=None,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return f'ExerciseHistory {self.id}'

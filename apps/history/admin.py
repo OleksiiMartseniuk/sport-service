@@ -35,14 +35,15 @@ class AdminExerciseHistory(admin.ModelAdmin):
 
     list_display = [
         'id',
-        'exercises',
-        'history_workout',
+        'exercises_title',
+        'workout_title',
     ]
     list_filter = [
         'exercises',
         'history_workout',
     ]
     exclude = ['event']
+    readonly_fields = ['open_date']
     inlines = [
         EventInline,
         ExerciseApproachesInline,
