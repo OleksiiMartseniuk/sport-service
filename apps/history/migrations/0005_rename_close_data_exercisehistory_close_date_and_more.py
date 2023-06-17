@@ -6,7 +6,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('history', '0004_exercisehistory_close_data_exercisehistory_open_data'),
+        (
+            'history',
+            '0004_exercisehistory_close_data_exercisehistory_open_data',
+        ),
     ]
 
     operations = [
