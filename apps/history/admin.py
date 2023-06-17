@@ -14,9 +14,9 @@ class AdminWorkoutHistory(admin.ModelAdmin):
     list_filter = [
         'user',
         'workout',
-        ('data_close', admin.EmptyFieldListFilter),
+        ('close_date', admin.EmptyFieldListFilter),
     ]
-    readonly_fields = ['data_open']
+    readonly_fields = ['open_date']
 
 
 class EventInline(admin.StackedInline):

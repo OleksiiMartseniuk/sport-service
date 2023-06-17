@@ -43,7 +43,7 @@ class TestService(TestCase):
         WorkoutHistory.objects.create(
             user=user,
             workout=workout,
-            data_close=timezone.now(),
+            close_date=timezone.now(),
         )
         # current workout
         history = WorkoutHistory.objects.create(

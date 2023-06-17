@@ -21,18 +21,18 @@ class WorkoutHistory(models.Model):
     # datetime - iso format
     # [{'datetime': 'value', 'event': 'value'}]
     detail_info = models.JSONField(default=list)
-    data_open = models.DateTimeField(
+    open_date = models.DateTimeField(
         auto_now_add=True,
     )
-    data_close = models.DateTimeField(
+    close_date = models.DateTimeField(
         default=None,
         blank=True,
         null=True,
     )
 
     def close_workout(self):
-        self.data_close = timezone.now()
-        self.save(update_fields=('data_close',))
+        self.close_date = timezone.now()
+        self.save(update_fields=('close_date',))
 
     def __str__(self) -> str:
         return (f"History [ {self.id} ] workout"
