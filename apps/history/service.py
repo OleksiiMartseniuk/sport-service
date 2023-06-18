@@ -3,10 +3,11 @@ import logging
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from apps.workout.models import Workout
+from apps.workout.models import Workout, Exercise
+from apps.utils.models import Event
 
-from .models import WorkoutHistory
-from .exceptions import HistoryWorkoutNotFound
+from .models import WorkoutHistory, ExerciseHistory
+from .exceptions import WorkoutHistoryNotFound
 
 logger = logging.getLogger('db')
 
@@ -17,7 +18,7 @@ class WorkoutHistoryAction:
     def create_workout(
         user: User,
         workout: Workout,
-    ):
+    ) -> None:
         detail_info = [
             {
                 'datetime': f'{timezone.now().isoformat()}',
@@ -34,16 +35,17 @@ class WorkoutHistoryAction:
         self,
         user: User,
         workout: Workout,
-    ):
+    ) -> None:
         history = self.get_current_workout_history(user=user, workout=workout)
         history.close_workout()
+        # TODO: add close ExerciseHistory
 
-    def close_workout_for_users(users_id: list[int], workout: Workout):
+    def close_workout_for_users(users_id: list[int], workout: Workout) -> None:
         WorkoutHistory.objects.filter(
             user__in=users_id,
             workout=workout,
-            data_close__isnull=True,
-        ).update(data_close=timezone.now())
+            close_date__isnull=True,
+        ).update(close_date=timezone.now())
 
     def update_workout_users(
         self,
@@ -51,11 +53,11 @@ class WorkoutHistoryAction:
         workout: Workout,
         # {'datetime': 'value', 'event': 'value'}
         detail_info: dict,
-    ):
+    ) -> None:
         history_list = WorkoutHistory.objects.filter(
             user__in=users_id,
             workout=workout,
-            data_close__isnull=True,
+            close_date__isnull=True,
         ).only('detail_info')
 
         for history in history_list:
@@ -70,15 +72,42 @@ class WorkoutHistoryAction:
         workout_history = WorkoutHistory.objects.filter(
             user=user,
             workout=workout,
-            data_close__isnull=True,
+            close_date__isnull=True,
         ).first()
 
         if not workout_history:
             logger.error(
                 'Not found history for close workout '
                 f'filter(user={user.id}, workout={workout.id},'
-                ' data_close__isnull=True)',
+                ' close_date__isnull=True)',
             )
-            raise HistoryWorkoutNotFound('Not found history for close workout')
+            raise WorkoutHistoryNotFound('Not found history for close workout')
 
         return workout_history
+
+
+class ExerciseHistoryAction(WorkoutHistoryAction):
+
+    def get_or_create(
+        self,
+        workout: Workout,
+        user: User,
+        exercise: Exercise,
+    ) -> ExerciseHistory:
+        workout_history = self.get_current_workout_history(
+            workout=workout,
+            user=user,
+        )
+        exercise_history, create = ExerciseHistory.objects.get_or_create(
+            exercises_title=exercise.title,
+            workout_title=workout.title,
+            exercises=exercise,
+            history_workout=workout_history,
+            close_date=None,
+        )
+        if create:
+            event = Event.objects.create(
+                title='Вы начали выполнять программу тренировок',
+            )
+            exercise_history.event.add(event)
+        return exercise_history
