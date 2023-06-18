@@ -1,2 +1,2 @@
-class HistoryWorkoutNotFound(Exception):
+class WorkoutHistoryNotFound(Exception):
     pass
