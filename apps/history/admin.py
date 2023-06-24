@@ -3,6 +3,15 @@ from django.contrib import admin
 from .models import WorkoutHistory, ExerciseHistory, ExerciseApproaches
 
 
+class EventInline(admin.StackedInline):
+    extra = 0
+    verbose_name_plural = 'event'
+
+
+class EventWorkoutHistoryInline(EventInline):
+    model = WorkoutHistory.event.through
+
+
 @admin.register(WorkoutHistory)
 class AdminWorkoutHistory(admin.ModelAdmin):
 
@@ -17,12 +26,12 @@ class AdminWorkoutHistory(admin.ModelAdmin):
         ('close_date', admin.EmptyFieldListFilter),
     ]
     readonly_fields = ['open_date']
+    exclude = ['event']
+    inlines = [EventWorkoutHistoryInline]
 
 
-class EventInline(admin.StackedInline):
+class EventExerciseHistoryInline(EventInline):
     model = ExerciseHistory.event.through
-    extra = 0
-    verbose_name_plural = 'event'
 
 
 class ExerciseApproachesInline(admin.StackedInline):
@@ -45,6 +54,6 @@ class AdminExerciseHistory(admin.ModelAdmin):
     exclude = ['event']
     readonly_fields = ['open_date']
     inlines = [
-        EventInline,
+        EventExerciseHistoryInline,
         ExerciseApproachesInline,
     ]
