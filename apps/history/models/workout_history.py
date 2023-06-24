@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 from apps.workout.models import Workout
+from apps.utils.models import Event
 
 
 class WorkoutHistory(models.Model):
@@ -18,9 +19,9 @@ class WorkoutHistory(models.Model):
         related_name='history_workout',
         null=True,
     )
-    # datetime - iso format
-    # [{'datetime': 'value', 'event': 'value'}]
-    detail_info = models.JSONField(default=list)
+    event = models.ManyToManyField(
+        Event,
+    )
     open_date = models.DateTimeField(
         auto_now_add=True,
     )
