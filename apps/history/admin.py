@@ -1,11 +1,8 @@
 from django.contrib import admin
 
+from apps.utils.admin import EventInline
+
 from .models import WorkoutHistory, ExerciseHistory, ExerciseApproaches
-
-
-class EventInline(admin.StackedInline):
-    extra = 0
-    verbose_name_plural = 'event'
 
 
 class EventWorkoutHistoryInline(EventInline):
