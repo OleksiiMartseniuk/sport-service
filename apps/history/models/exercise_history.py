@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from apps.workout.models import Exercise
 from apps.utils.models import Event
@@ -37,6 +38,10 @@ class ExerciseHistory(models.Model):
         null=True,
     )
 
+    def close_exercise_history(self):
+        self.close_date = timezone.now()
+        self.save(update_fields=('close_date',))
+
     def __str__(self) -> str:
         return f'ExerciseHistory {self.id}'
 
@@ -48,7 +53,7 @@ class ExerciseApproaches(models.Model):
         on_delete=models.CASCADE,
         related_name='exercise_approaches',
     )
-    number_approaches = models.PositiveIntegerField()
+    current_approach = models.PositiveIntegerField()
     number_repetitions = models.PositiveIntegerField()
     created = models.DateTimeField(
         auto_now_add=True,
