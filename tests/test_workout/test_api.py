@@ -178,7 +178,7 @@ class TestApi(TestCase):
         history = WorkoutHistory.objects.first()
         self.assertTrue(history.close_date)
         self.assertEqual(
-            history.detail_info[1]['event'],
+            history.event.last().title,
             f'Owner {workout.user.username} workout removed workout',
         )
 

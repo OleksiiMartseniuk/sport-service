@@ -19,17 +19,14 @@ class WorkoutHistoryAction:
         user: User,
         workout: Workout,
     ) -> None:
-        detail_info = [
-            {
-                'datetime': f'{timezone.now().isoformat()}',
-                'event': f'The program #{workout.title} was started',
-            },
-        ]
-        WorkoutHistory.objects.create(
+        event = Event.objects.create(
+            title=f'The program #{workout.title} was started',
+        )
+        workout_history = WorkoutHistory.objects.create(
             user=user,
             workout=workout,
-            detail_info=detail_info,
         )
+        workout_history.event.add(event)
 
     def close_workout(
         self,
@@ -51,18 +48,17 @@ class WorkoutHistoryAction:
         self,
         users_id: list[int],
         workout: Workout,
-        # {'datetime': 'value', 'event': 'value'}
-        detail_info: dict,
+        event_massage: str,
     ) -> None:
         history_list = WorkoutHistory.objects.filter(
             user__in=users_id,
             workout=workout,
             close_date__isnull=True,
-        ).only('detail_info')
-
+        )
         for history in history_list:
-            history.detail_info.append(detail_info)
-            history.save(update_fields=('detail_info',))
+            history.event.add(
+                Event.objects.create(title=event_massage),
+            )
 
     @staticmethod
     def get_current_workout_history(
@@ -111,3 +107,6 @@ class ExerciseHistoryAction(WorkoutHistoryAction):
             )
             exercise_history.event.add(event)
         return exercise_history
+
+    def close_history(self, workout: Workout,  user: User):
+        pass

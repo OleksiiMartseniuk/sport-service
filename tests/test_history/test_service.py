@@ -40,7 +40,7 @@ class TestService(TestCase):
         self.assertEqual(history.workout, workout)
         self.assertEqual(history.user, user)
         self.assertEqual(
-            history.detail_info[0]['event'],
+            history.event.first().title,
             f'The program #{workout.title} was started',
         )
 

@@ -1,7 +1,6 @@
 from rest_framework import generics, viewsets
 from rest_framework.parsers import MultiPartParser
 
-from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.account.models import Profile
@@ -65,12 +64,9 @@ class WorkoutView(viewsets.ModelViewSet):
         WorkoutHistoryAction().update_workout_users(
             users_id=users_id,
             workout=instance,
-            detail_info={
-                'datetime': timezone.now().isoformat(),
-                'event': (
-                    f'Owner {instance.user.username} workout removed workout'
-                ),
-            },
+            event_massage=(
+                f'Owner {instance.user.username} workout removed workout'
+            ),
         )
         # closed history workout
         WorkoutHistoryAction.close_workout_for_users(
