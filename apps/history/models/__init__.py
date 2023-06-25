@@ -1,2 +1,2 @@
 from .workout_history import WorkoutHistory
-from .exercise_history import ExerciseHistory, ExerciseApproaches
+from .exercise_history import ExerciseHistory, ExerciseApproach

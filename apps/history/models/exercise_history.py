@@ -46,7 +46,7 @@ class ExerciseHistory(models.Model):
         return f'ExerciseHistory {self.id}'
 
 
-class ExerciseApproaches(models.Model):
+class ExerciseApproach(models.Model):
 
     exercise_history = models.ForeignKey(
         ExerciseHistory,
@@ -61,6 +61,6 @@ class ExerciseApproaches(models.Model):
 
     def __str__(self) -> str:
         return (
-            f'ExerciseApproaches {self.id} ExerciseHistory'
+            f'ExerciseApproach {self.id} ExerciseHistory'
             f'{self.exercise_history.id}'
         )

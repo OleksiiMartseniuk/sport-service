@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.utils.admin import EventInline
 
-from .models import WorkoutHistory, ExerciseHistory, ExerciseApproaches
+from .models import WorkoutHistory, ExerciseHistory, ExerciseApproach
 
 
 class EventWorkoutHistoryInline(EventInline):
@@ -31,8 +31,8 @@ class EventExerciseHistoryInline(EventInline):
     model = ExerciseHistory.event.through
 
 
-class ExerciseApproachesInline(admin.StackedInline):
-    model = ExerciseApproaches
+class ExerciseApproachInline(admin.StackedInline):
+    model = ExerciseApproach
     extra = 0
 
 
@@ -52,5 +52,5 @@ class AdminExerciseHistory(admin.ModelAdmin):
     readonly_fields = ['open_date']
     inlines = [
         EventExerciseHistoryInline,
-        ExerciseApproachesInline,
+        ExerciseApproachInline,
     ]
