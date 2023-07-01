@@ -16,6 +16,7 @@ from apps.history.models import (
     ExerciseApproach,
 )
 from apps.history.service import WorkoutHistoryAction, ExerciseHistoryAction
+from apps.history.exceptions import WorkoutHistoryNotFound
 
 
 class TestService(TestCase):
@@ -235,3 +236,65 @@ class TestService(TestCase):
         self.assertEqual(ExerciseApproach.objects.count(), 1)
         exercise_history.refresh_from_db()
         self.assertTrue(exercise_history.close_date)
+
+    def test_close_exercise_history(self):
+        user = User.objects.create_user('user_test')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+        exercise = Exercise.objects.create(
+            title='exercise_test',
+            workout=workout,
+            number_approaches=1,
+            number_repetitions=1,
+            rest_second=1,
+            day=Exercise.MONDAY,
+            image=self.generate_image_file(),
+        )
+
+        user.profile.workout = workout
+        user.save()
+
+        exercise_history = ExerciseHistory.objects.create(
+            exercises_title=exercise.title,
+            workout_title=workout.title,
+            exercises=exercise,
+            history_workout=user.history_workout.first(),
+            close_date=None,
+        )
+
+        self.assertIsNone(exercise_history.close_date)
+        ExerciseHistoryAction.close_exercise_history(
+            exercise_id=exercise.id,
+            user=user,
+        )
+        exercise_history.refresh_from_db()
+        self.assertTrue(exercise_history.close_date)
+
+    def test_close_exercise_history_not_history_workout(self):
+        user = User.objects.create_user('user_test')
+        self.assertRaises(
+            WorkoutHistoryNotFound,
+            ExerciseHistoryAction.close_exercise_history,
+            1,
+            user,
+        )
+
+    def test_close_exercise_history_not_exercise_history(self):
+        user = User.objects.create_user('user_test')
+        category = Category.objects.create(title='tets_category')
+        workout = Workout.objects.create(
+            title='test_workout',
+            category=category,
+        )
+        user.profile.workout = workout
+        user.save()
+
+        self.assertRaises(
+            WorkoutHistoryNotFound,
+            ExerciseHistoryAction.close_exercise_history,
+            1,
+            user,
+        )

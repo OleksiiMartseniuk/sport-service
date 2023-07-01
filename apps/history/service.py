@@ -148,3 +148,36 @@ class ExerciseHistoryAction(WorkoutHistoryAction):
                     f'[{exercise_history.id}]'
                 ),
             )
+
+    @staticmethod
+    def close_exercise_history(exercise_id: int, user: User) -> None:
+        history_workout: WorkoutHistory | None = user.history_workout.filter(
+            close_date__isnull=True,
+        ).first()
+        if not history_workout:
+            logger.error(
+                f"Don't found WorkoutHistory for "
+                f"user[{user.id}] exercise_id[{exercise_id}]",
+            )
+            raise WorkoutHistoryNotFound("Don't found workout history")
+
+        exercise_history: ExerciseHistory | None = (
+            history_workout.exercise_history.filter(
+                close_date__isnull=True,
+                exercises__id=exercise_id,
+            ).first()
+        )
+
+        if not exercise_history:
+            logger.error(
+                "Don't found ExerciseHistory for history_workout"
+                f"[{history_workout.id}] exercises__id[{exercise_id}]",
+            )
+            raise WorkoutHistoryNotFound("Don't found exercise history")
+
+        event = Event.objects.create(
+            title='Вы завершили выполнение упражнения',
+        )
+        exercise_history.close_date = timezone.now()
+        exercise_history.save(update_fields=('close_date',))
+        exercise_history.event.add(event)
