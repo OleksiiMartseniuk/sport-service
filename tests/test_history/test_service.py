@@ -194,7 +194,7 @@ class TestService(TestCase):
     @mock.patch('apps.history.service.ExerciseHistoryAction.get_or_create')
     def test_add_exercise_approach_close_exercise_history(
         self,
-        get_or_create_mock: mock.MagicMock
+        get_or_create_mock: mock.MagicMock,
     ):
         user = User.objects.create_user('user_test')
         category = Category.objects.create(title='tets_category')
