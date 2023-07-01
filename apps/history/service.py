@@ -45,11 +45,23 @@ class WorkoutHistoryAction:
             )
 
     def close_workout_for_users(users_id: list[int], workout: Workout) -> None:
-        WorkoutHistory.objects.filter(
+        workout_history = WorkoutHistory.objects.filter(
             user__in=users_id,
             workout=workout,
             close_date__isnull=True,
+        )
+        if not workout_history:
+            logger.warning(
+                f"Don't found WorkoutHistory. user__in=[{users_id}] "
+                f"workout=[{workout.id}] close_date__isnull=[True]",
+            )
+            return
+        workout_history_id = workout_history.values_list("id", flat=True)
+        ExerciseHistory.objects.filter(
+            history_workout__in=workout_history_id,
+            close_date__isnull=True,
         ).update(close_date=timezone.now())
+        workout_history.update(close_date=timezone.now())
 
     def update_workout_users(
         self,
