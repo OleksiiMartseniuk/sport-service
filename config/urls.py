@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 from apps.account import urls as account_url
 from apps.workout import urls as workout_url
+from apps.history import urls as history_url
 
 from .yasg import docs_url
 
@@ -17,6 +18,7 @@ api_urlpatterns = [
 for app_url in (
     account_url,
     workout_url,
+    history_url,
 ):
     api_urlpatterns.extend(getattr(app_url, "api_urlpatterns", []))
 
