@@ -35,7 +35,7 @@ class WorkoutHistoryAction:
     ) -> None:
         history = self.get_current_workout_history(user=user, workout=workout)
         history.close_workout()
-        # TODO: add close ExerciseHistory
+        history.exercise_history.update(close_date=timezone.now())
 
     def close_workout_for_users(users_id: list[int], workout: Workout) -> None:
         WorkoutHistory.objects.filter(
