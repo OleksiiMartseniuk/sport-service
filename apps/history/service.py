@@ -6,7 +6,7 @@ from django.utils import timezone
 from apps.workout.models import Workout, Exercise
 from apps.utils.models import Event
 
-from .models import WorkoutHistory, ExerciseHistory
+from .models import WorkoutHistory, ExerciseHistory, ExerciseApproach
 from .exceptions import WorkoutHistoryNotFound
 
 logger = logging.getLogger('db')
@@ -108,5 +108,36 @@ class ExerciseHistoryAction(WorkoutHistoryAction):
             exercise_history.event.add(event)
         return exercise_history
 
-    def close_history(self, workout: Workout,  user: User):
-        pass
+    def add_exercise_approach(
+        self,
+        workout: Workout,
+        user: User,
+        exercise: Exercise,
+        number_repetitions: int,
+    ) -> None:
+        exercise_history = self.get_or_create(
+            workout=workout,
+            user=user,
+            exercise=exercise,
+        )
+
+        exercise_approach_count = exercise_history.exercise_approaches.count()
+        next_exercise_approach = exercise_approach_count + 1
+
+        exercise_approach = ExerciseApproach.objects.create(
+            exercise_history=exercise_history,
+            current_approach=next_exercise_approach,
+            number_repetitions=number_repetitions,
+        )
+
+        if exercise.number_approaches == next_exercise_approach:
+            exercise_history.close_exercise_history()
+
+        if exercise.number_approaches < next_exercise_approach:
+            logger.error(
+                (
+                    f'Repetition sequence exceeded ExerciseApproach['
+                    f'{exercise_approach.id}] - ExerciseHistory'
+                    f'[{exercise_history.id}]'
+                ),
+            )
