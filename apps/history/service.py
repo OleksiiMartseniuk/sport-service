@@ -35,7 +35,14 @@ class WorkoutHistoryAction:
     ) -> None:
         history = self.get_current_workout_history(user=user, workout=workout)
         history.close_workout()
-        history.exercise_history.update(close_date=timezone.now())
+        if history.exercise_history.count():
+            event = Event.objects.create(
+                title='Вы завершили выполнение упражнения',
+            )
+            history.exercise_history.update(
+                close_date=timezone.now(),
+                event=event,
+            )
 
     def close_workout_for_users(users_id: list[int], workout: Workout) -> None:
         WorkoutHistory.objects.filter(
@@ -103,7 +110,7 @@ class ExerciseHistoryAction(WorkoutHistoryAction):
         )
         if create:
             event = Event.objects.create(
-                title='Вы начали выполнять программу тренировок',
+                title='Вы начали выполнять упражнения',
             )
             exercise_history.event.add(event)
         return exercise_history
