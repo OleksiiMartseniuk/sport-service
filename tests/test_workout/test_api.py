@@ -176,9 +176,9 @@ class TestApi(TestCase):
         self.assertIsNone(user_test.profile.workout)
         self.assertEqual(Notification.objects.count(), 1)
         history = WorkoutHistory.objects.first()
-        self.assertTrue(history.data_close)
+        self.assertTrue(history.close_date)
         self.assertEqual(
-            history.detail_info[1]['event'],
+            history.event.last().title,
             f'Owner {workout.user.username} workout removed workout',
         )
 

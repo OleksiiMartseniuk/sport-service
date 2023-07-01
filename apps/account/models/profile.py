@@ -6,7 +6,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from apps.workout.models import Workout
-from apps.history.service import HistoryAction
+from apps.history.service import WorkoutHistoryAction
 
 
 logger = logging.getLogger('db')
@@ -62,7 +62,7 @@ def write_history_workout(sender, instance: Profile, **kwargs):
         previous_profile: Profile = sender.objects.get(id=instance.id)
         if previous_profile.workout != instance.workout:
             if previous_profile.workout:
-                HistoryAction().close_workout(
+                WorkoutHistoryAction().close_workout(
                     user=previous_profile.owner,
                     workout=previous_profile.workout,
                 )
@@ -71,7 +71,7 @@ def write_history_workout(sender, instance: Profile, **kwargs):
                     f' workout [{previous_profile.workout.title}]',
                 )
             if instance.workout:
-                HistoryAction.create_workout(
+                WorkoutHistoryAction.create_workout(
                     user=instance.owner,
                     workout=instance.workout,
                 )

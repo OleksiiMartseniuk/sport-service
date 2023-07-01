@@ -59,7 +59,7 @@ class TestModels(TestCase):
 
         self.assertEqual(WorkoutHistory.objects.count(), 1)
         history = WorkoutHistory.objects.first()
-        self.assertIsNone(history.data_close)
+        self.assertIsNone(history.close_date)
 
     def test_write_history_workout_change_program_program(self):
         user = User.objects.create_user('test_user_1')
@@ -79,20 +79,20 @@ class TestModels(TestCase):
 
         self.assertEqual(WorkoutHistory.objects.count(), 1)
         history = WorkoutHistory.objects.first()
-        self.assertIsNone(history.data_close)
+        self.assertIsNone(history.close_date)
 
         user.profile.workout = workout_other
         user.save()
 
         history.refresh_from_db()
-        self.assertTrue(history.data_close)
+        self.assertTrue(history.close_date)
 
         history_new = WorkoutHistory.objects.filter(
             user=user,
             workout=workout_other,
-            data_close__isnull=True,
+            close_date__isnull=True,
         ).first()
-        self.assertIsNone(history_new.data_close)
+        self.assertIsNone(history_new.close_date)
         self.assertEqual(WorkoutHistory.objects.count(), 2)
 
     def test_write_history_workout_change_program_none(self):
@@ -108,11 +108,11 @@ class TestModels(TestCase):
 
         self.assertEqual(WorkoutHistory.objects.count(), 1)
         history = WorkoutHistory.objects.first()
-        self.assertIsNone(history.data_close)
+        self.assertIsNone(history.close_date)
 
         user.profile.workout = None
         user.save()
 
         history.refresh_from_db()
-        self.assertTrue(history.data_close)
+        self.assertTrue(history.close_date)
         self.assertEqual(WorkoutHistory.objects.count(), 1)
