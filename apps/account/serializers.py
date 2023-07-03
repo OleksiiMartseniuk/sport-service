@@ -8,6 +8,16 @@ from djoser.conf import settings
 from .models import Profile
 
 
+class UserSmallSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+        ]
+
+
 class UserCustomSerializer(UserSerializer):
     class Meta:
         model = User

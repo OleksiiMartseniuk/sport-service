@@ -44,6 +44,16 @@ class WorkoutRetrieveSerializers(WorkoutSerializers):
     user = UserCustomSerializer()
 
 
+class WorkoutSmallSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Workout
+        fields = [
+            'id',
+            'title',
+        ]
+
+
 class ExerciseSerializers(serializers.ModelSerializer):
 
     class Meta:
